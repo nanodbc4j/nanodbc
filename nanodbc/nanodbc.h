@@ -2346,6 +2346,10 @@ public:
         string table_type() const;    ///< Fetch table type.
         string table_remarks() const; ///< Fetch table remarks.
 
+    protected:
+        /// \brief Access underlying result for derived classes.
+        result& get_result();
+
     private:
         friend class nanodbc::catalog;
         explicit tables(result& find_result);
@@ -2386,6 +2390,10 @@ public:
         ///       An ISO SQL-compliant DBMS cannot return an empty string.
         string is_nullable() const;
 
+    protected:
+        /// \brief Access underlying result for derived classes.
+        result& get_result();
+
     private:
         friend class nanodbc::catalog;
         explicit columns(result& find_result);
@@ -2410,6 +2418,10 @@ public:
         /// NULL if not applicable to the data source.
         /// Returns valye of PK_NAME column in result set returned by SQLPrimaryKeys.
         string primary_key_name() const;
+
+    protected:
+        /// \brief Access underlying result for derived classes.
+        result& get_result();
 
     private:
         friend class nanodbc::catalog;
@@ -2447,6 +2459,10 @@ public:
         string procedure_name() const;    ///< Fetch procedure name.
         string procedure_remarks() const; ///< Fetch procedure remarks.
         short procedure_type() const;     ///< Fetch procedure type.
+
+    protected:
+        /// \brief Access underlying result for derived classes.
+        result& get_result();
 
     private:
         friend class nanodbc::catalog;
@@ -2488,6 +2504,10 @@ public:
         ///       ISO rules are followed to determine nullability.
         ///       An ISO SQL-compliant DBMS cannot return an empty string.
         string is_nullable() const;
+
+    protected:
+        /// \brief Access underlying result for derived classes.
+        result& get_result();
 
     private:
         friend class nanodbc::catalog;

@@ -6481,6 +6481,11 @@ string catalog::tables::table_remarks() const
     return result_.get<string>(4, string());
 }
 
+result& catalog::tables::get_result()
+{
+    return result_;
+}
+
 catalog::procedures::procedures(result& find_result)
     : result_(find_result)
 {
@@ -6520,6 +6525,11 @@ short catalog::procedures::procedure_type() const
 {
     // PROCEDURE_TYPE may be NULL
     return result_.get<short>(7, SQL_PT_UNKNOWN);
+}
+
+result& catalog::procedures::get_result()
+{
+    return result_;
 }
 
 catalog::table_privileges::table_privileges(result& find_result)
@@ -6618,6 +6628,11 @@ string catalog::primary_keys::primary_key_name() const
 {
     // PK_NAME might be NULL
     return result_.get<string>(5);
+}
+
+result& catalog::primary_keys::get_result()
+{
+    return result_;
 }
 
 catalog::procedure_columns::procedure_columns(result& find_result)
@@ -6744,6 +6759,11 @@ string catalog::procedure_columns::is_nullable() const
     return result_.get<string>(18, string());
 }
 
+result& catalog::procedure_columns::get_result()
+{
+    return result_;
+}
+
 catalog::columns::columns(result& find_result)
     : result_(find_result)
 {
@@ -6860,6 +6880,11 @@ string catalog::columns::is_nullable() const
 {
     // IS_NULLABLE might be NULL.
     return result_.get<string>(17, string());
+}
+
+result& catalog::columns::get_result()
+{
+    return result_;
 }
 
 catalog::catalog(connection& conn)
