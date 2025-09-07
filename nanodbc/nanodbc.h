@@ -2626,6 +2626,16 @@ public:
     /// table type search pattern.
     std::list<string> list_table_types();
 
+protected:
+    /// \brief Executes SQLTables to list all catalogs. Returns result with TABLE_CAT column.
+    result list_catalogs_impl();
+
+    /// \brief Executes SQLTables to list all schemas. Returns result with TABLE_SCHEM column.
+    result list_schemas_impl();
+
+    /// \brief Executes SQLTables to list all table types. Returns result with TABLE_TYPE column.
+    result list_table_types_impl();
+
 private:
     connection conn_;
 };

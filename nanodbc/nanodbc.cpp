@@ -7067,6 +7067,40 @@ catalog::find_primary_keys(string const& table, string const& schema, string con
 }
 
 std::list<string> catalog::list_catalogs()
+{    
+    result result = list_catalogs_impl();
+    catalog::tables catalogs(result);
+
+    std::list<string> names;
+    while (catalogs.next())
+        names.push_back(catalogs.table_catalog());
+    return names;
+}
+
+std::list<string> catalog::list_schemas()
+{
+    result result = list_schemas_impl();
+    catalog::tables schemas(result);
+
+    std::list<string> names;
+    while (schemas.next())
+        names.push_back(schemas.table_schema());
+    return names;
+}
+
+std::list<string> catalog::list_table_types()
+{    
+    result result = list_table_types_impl();
+    catalog::tables table_types(result);
+
+    std::list<string> names;
+    while (table_types.next())
+        names.push_back(table_types.table_type());
+    return names;
+}
+
+
+result catalog::list_catalogs_impl()
 {
     // Special case for list of catalogs only:
     // all the other arguments must match empty string (""),
@@ -7089,16 +7123,10 @@ std::list<string> catalog::list_catalogs()
     if (!success(rc))
         NANODBC_THROW_DATABASE_ERROR(stmt.native_statement_handle(), SQL_HANDLE_STMT);
 
-    result find_result(stmt, 1);
-    catalog::tables catalogs(find_result);
-
-    std::list<string> names;
-    while (catalogs.next())
-        names.push_back(catalogs.table_catalog());
-    return names;
+    return result (stmt, 1);
 }
 
-std::list<string> catalog::list_schemas()
+result catalog::list_schemas_impl()
 {
     // Special case for list of schemas:
     // all the other arguments must match empty string (""),
@@ -7121,16 +7149,11 @@ std::list<string> catalog::list_schemas()
     if (!success(rc))
         NANODBC_THROW_DATABASE_ERROR(stmt.native_statement_handle(), SQL_HANDLE_STMT);
 
-    result find_result(stmt, 1);
-    catalog::tables schemas(find_result);
-
-    std::list<string> names;
-    while (schemas.next())
-        names.push_back(schemas.table_schema());
-    return names;
+    return result (stmt, 1);
 }
 
-std::list<string> catalog::list_table_types()
+
+result catalog::list_table_types_impl()
 {
     statement stmt(conn_);
     RETCODE rc;
@@ -7149,13 +7172,7 @@ std::list<string> catalog::list_table_types()
     if (!success(rc))
         NANODBC_THROW_DATABASE_ERROR(stmt.native_statement_handle(), SQL_HANDLE_STMT);
 
-    result find_result(stmt, 1);
-    catalog::tables table_types(find_result);
-
-    std::list<string> names;
-    while (table_types.next())
-        names.push_back(table_types.table_type());
-    return names;
+    return result(stmt, 1);
 }
 
 } // namespace nanodbc
