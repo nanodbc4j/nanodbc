@@ -2049,7 +2049,7 @@ public:
     /// \brief If and only if result object is valid, returns true.
     explicit operator bool() const;
 
-private:
+protected:
     result(statement statement, long rowset_size);
 
 private:
