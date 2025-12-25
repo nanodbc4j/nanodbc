@@ -413,6 +413,24 @@ inline void convert(std::basic_string<T> const& in, std::basic_string<U>& out)
     convert(in.data(), in.size(), out);
 }
 
+struct ilesscompare {
+    bool operator()(const nanodbc::string& lhs,
+                    const nanodbc::string& rhs) const {
+        auto to_lower = [](unsigned char c) -> unsigned char {
+            return (c >= 'A' && c <= 'Z') ? static_cast<unsigned char>(c + ('a' - 'A')) : c;
+        };
+
+        return std::lexicographical_compare(
+            lhs.begin(), lhs.end(),
+            rhs.begin(), rhs.end(),
+            [&to_lower](auto c1, auto c2) {
+                return to_lower(static_cast<unsigned char>(c1))
+                     < to_lower(static_cast<unsigned char>(c2));
+            }
+        );
+    }
+};
+
 // Attempts to get the most recent ODBC error as a string.
 // Always returns std::string, even in unicode mode.
 inline std::string
@@ -4194,7 +4212,7 @@ private:
     bound_column* bound_columns_;
     short bound_columns_size_;
     long rowset_position_;
-    std::map<string, bound_column*> bound_columns_by_name_;
+    std::map<string, bound_column*, ilesscompare> bound_columns_by_name_;
     bool at_end_;
 #if defined(NANODBC_DO_ASYNC_IMPL)
     bool async_; // true if statement is currently in SQL_STILL_EXECUTING mode
